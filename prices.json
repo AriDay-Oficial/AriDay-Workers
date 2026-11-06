@@ -1,5 +1,5 @@
 {
-  "version": "1.6",
+  "version": "1.7",
   "minAmounts": {
     "ARS": 10000,
     "CUP": 3257,
@@ -12,7 +12,7 @@
     "RATE_MLC": 869.5652173913,
     "RATE_USD": 1650,
     "USD_EXTRA": 0.15,
-    "RATE_USDT": 1650
+    "RATE_USDT": 2000
   },
   "thresholds": {
     "CUP_MAX": 100000
