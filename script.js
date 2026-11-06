@@ -69,8 +69,8 @@ function updateDisabledOptions() {
     );
   }
   
-  if (from === toSelect.value) {
-    toSelect.value = (from === 'ARS') ? 'CUP' : 'ARS';
+  if (toSelect.selectedOptions[0]?.disabled) {
+    toSelect.value = (from === 'ARS') ? 'USDT' : 'ARS';
   }
 }
 
@@ -159,7 +159,26 @@ function calculate() {
     return;
   }
 
-  if (from === 'ARS' && to === 'CUP') {
+  if (from === 'ARS' && to === 'USDT') {
+    if (num < config.minAmounts.ARS) {
+      out.textContent = `ARS ≥ ${formatArgentineNumber(config.minAmounts.ARS)}.`;
+      out.className = 'result result-error';
+      return;
+    }
+    const usdt = (num / config.rates.RATE_USDT).toFixed(2);
+    out.textContent = `Con ${formatArgentineNumber(num)} ARS recibís aprox. ${usdt} USDT.`;
+    out.className = 'result result-success';
+    lastResult = `Quiero enviar ${formatArgentineNumber(num)} ARS y recibir ${usdt} USDT.`;
+    copyResultValue = `${usdt} USDT`;
+  }
+  else if (from === 'USDT' && to === 'ARS') {
+    const ars = Math.round(num * config.rates.RATE_USDT);
+    out.textContent = `Recibís aprox. ${formatArgentineNumber(ars)} ARS por ${num} USDT.`;
+    out.className = 'result result-success';
+    lastResult = `Quiero enviar ${num} USDT y recibir ${formatArgentineNumber(ars)} ARS.`;
+    copyResultValue = `${formatArgentineNumber(ars)} ARS`;
+  }
+  else if (from === 'ARS' && to === 'CUP') {
     if (num < config.minAmounts.ARS) {
       out.textContent = `ARS ≥ ${formatArgentineNumber(config.minAmounts.ARS)}.`;
       out.className = 'result result-error';
@@ -214,10 +233,10 @@ function calculate() {
       return;
     }
     const usd = Math.round(num / (config.rates.RATE_USD * (1 + config.rates.USD_EXTRA)));
-    out.textContent = `💲 Con ${formatArgentineNumber(num)} ARS recibís aprox. ${formatArgentineNumber(usd)} USDT.`;
+    out.textContent = `💲 Con ${formatArgentineNumber(num)} ARS recibís aprox. ${formatArgentineNumber(usd)} USD Efectivo.`;
     out.className = 'result result-success';
-    lastResult = `Quiero enviar ${formatArgentineNumber(num)} ARS y recibir ${formatArgentineNumber(usd)} USDT.`;
-    copyResultValue = `${formatArgentineNumber(usd)} USDT`;
+    lastResult = `Quiero enviar ${formatArgentineNumber(num)} ARS y recibir ${formatArgentineNumber(usd)} USD Efectivo.`;
+    copyResultValue = `${formatArgentineNumber(usd)} USD Efectivo`;
   }
   else if (from === 'USD' && to === 'ARS') {
     const ars = Math.round(num * (1 + config.rates.USD_EXTRA) * config.rates.RATE_USD);
